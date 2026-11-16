@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard Tracking KPIs – T11.2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1d2320;--mut:#6b7570;--line:#e4e0d6;--ok:#1f8a5b;--warn:#d9902b;--bad:#c9473d;--acc:#16473a;--okb:#dff2e8;--warnb:#fbefd8;--badb:#f8e0dd;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121715;--card:#1b2220;--ink:#e9eeeb;--mut:#92a09a;--line:#2b3430;--ok:#4fc08d;--warn:#e8aa4c;--bad:#ef7a70;--acc:#7fd1ae;--okb:#17372b;--warnb:#3b2f17;--badb:#3d201d}}
+:root[data-theme="dark"]{--bg:#121715;--card:#1b2220;--ink:#e9eeeb;--mut:#92a09a;--line:#2b3430;--ok:#4fc08d;--warn:#e8aa4c;--bad:#ef7a70;--acc:#7fd1ae;--okb:#17372b;--warnb:#3b2f17;--badb:#3d201d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 'Be Vietnam Pro',system-ui,sans-serif}
+.w{max-width:1180px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:22px;margin:0}h2{font-size:15px;margin:28px 0 10px;letter-spacing:.02em}
+.sub{color:var(--mut);font-size:13px}
+.top{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end}
+.prog{min-width:240px;flex:0 1 320px}.prog b{font-size:13px}
+.bar{height:8px;background:var(--line);border-radius:5px;position:relative;overflow:hidden}.bar i{display:block;height:100%;border-radius:5px;background:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:16px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.k .t{display:flex;justify-content:space-between;color:var(--mut);font-size:12px}
+.k .n{font-weight:600;margin:2px 0 6px}.k .p{font-size:30px;font-weight:700;line-height:1}
+.k .d{color:var(--mut);font-size:12px;margin-top:8px}
+.tr{position:relative;height:8px;background:var(--line);border-radius:5px;margin-top:10px}.tr i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.tr u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.55}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.bg-ok{background:var(--ok)}.bg-warn{background:var(--warn)}.bg-bad{background:var(--bad)}
+.sc{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11.5px;color:var(--mut);font-weight:600;cursor:pointer;user-select:none;position:sticky;top:0;background:var(--card)}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--card);font-weight:500}
+tbody tr{cursor:pointer}tbody tr:hover td{background:var(--bg)}tr.sel td{background:var(--okb)!important}
+tfoot td{font-weight:700;border-bottom:0}
+.c{display:inline-block;min-width:54px;padding:2px 8px;border-radius:6px;font-weight:600;font-size:12.5px;text-align:center}
+.c.ok{background:var(--okb)}.c.warn{background:var(--warnb)}.c.bad{background:var(--badb)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:820px){.two{grid-template-columns:1fr}}
+.pn{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.row{display:grid;grid-template-columns:130px 1fr 52px;gap:8px;align-items:center;margin:7px 0;font-size:12.5px}
+.row .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.det{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.det div.x{border:1px solid var(--line);border-radius:10px;padding:10px}.det .x b{display:block;font-size:12px;color:var(--mut);margin-bottom:4px}
+.det .x span{display:flex;justify-content:space-between;font-size:12.5px}
+.leg{font-size:12px;color:var(--mut);margin-top:8px}
+</style></head><body><div class="w">
+<div class="top"><div><h1>Tracking KPIs · <span id="mo"></span></h1><div class="sub" id="as"></div></div>
+<div class="prog"><b id="pt"></b><div class="bar" style="margin-top:6px"><i id="pb"></i></div></div></div>
+<div class="grid" id="kp"></div>
+<h2>KẾT QUẢ THEO NHÂN VIÊN <span class="sub">· bấm tiêu đề để sắp xếp, bấm dòng để xem chi tiết</span></h2>
+<div class="sc"><table><thead id="th"></thead><tbody id="tb"></tbody><tfoot id="tf"></tfoot></table></div>
+<div class="leg">Màu: <span class="ok">xanh</span> = đạt/ vượt tiến độ ngày; <span class="warn">vàng</span> = ≥80% tiến độ; <span class="bad">đỏ</span> = chậm. LPPC và LPPC_Meat so với mức chỉ tiêu cố định (5.5 / 3.8).</div>
+<h2>CHI TIẾT <span id="dn"></span></h2><div class="det" id="dt"></div>
+<div class="two"><div><h2>DOANH SỐ TỔNG – % CHỈ TIÊU</h2><div class="pn" id="c1"></div></div>
+<div><h2>THƯỞNG TẠM TÍNH</h2><div class="pn" id="c2"></div></div></div>
+</div>
+<script>
+const D={"asof":"2026-11-15","day":12,"days":24,"month":"11.2026","total":{"B":59824644.0096,"C":0.0053,"D":11391493128,"E":3927835019.9487,"F":0.3448,"G":621971509.0043,"H":2603,"I":1407,"J":874,"K":0.5405,"L":99.6667,"N":1639,"O":4.4375,"P":0.8068,"Q":0,"R":1445,"S":1116,"T":0.7723,"U":27.4167,"V":220,"W":126,"X":268,"Y":34,"Z":5,"AA":20,"AB":34,"AC":0.1545,"AD":15.5,"AE":165,"AF":98,"AG":0.5939,"AH":-53,"AI":828,"AJ":293,"AK":0.3539,"AL":44.5833,"AN":498,"AO":3.7269,"AP":0.9808,"AQ":0,"AS":2,"AU":11,"AV":20000,"AW":2955059691.21,"AX":1147700333.8357,"AY":0.3884,"AZ":0,"BA":694943623.26,"BB":252459134,"BC":200121834,"BD":21332600,"BE":31004700,"BF":0.3633,"BG":0,"BH":196,"BI":87,"BJ":0.4439,"BK":1480000,"BL":0,"BM":1,"BN":0,"BO":165,"BP":43,"BQ":0.2606,"BR":0,"BS":693,"BT":367,"BU":77,"BV":259,"CA":9582576286,"CB":3145715534.1683,"CC":1808916842,"CD":733512719.7837,"CE":6436860751.8317,"CF":1075404122.2163,"CG":null,"CH":null},"rows":[{"name":"Đào Thị Tình","B":1542200.0012,"C":0.0012,"D":1288906327,"E":353744448.0529,"F":0.2745,"G":77930156.5789,"H":323,"I":211,"J":63,"K":0.6533,"L":9.3333,"N":282,"O":2.227,"P":0.4049,"Q":"Không đạt","R":207,"S":204,"T":0.9855,"U":0.25,"V":20,"W":9,"X":28,"Y":1,"Z":0,"AA":2,"AB":1,"AC":0.05,"AD":1.5833,"AE":15,"AF":5,"AG":0.3333,"AH":0.8333,"AI":121,"AJ":79,"AK":0.6529,"AL":3.5,"AN":27,"AO":3.8889,"AP":1.0234,"AQ":"Đạt","AS":0,"AU":0,"AV":0,"AW":256102759.63,"AX":72122500.0385,"AY":0.2816,"AZ":0,"BA":43824063.85,"BB":13970088,"BC":11061088,"BD":80000,"BE":2829000,"BF":0.3188,"BG":0,"BH":18,"BI":18,"BJ":1,"BK":300000,"BL":0,"BM":1,"BN":0,"BO":15,"BP":1,"BQ":0.0667,"BR":0,"BS":107,"BT":59,"BU":14,"BV":70,"CA":1010628997,"CB":241489364.0363,"CC":278277330,"CD":111792124.017,"CE":769139632.9637,"CF":166485205.983,"CG":0.2389,"CH":0.4017},{"name":"Lê Đình Hiếu","B":8916364.0009,"C":0.0092,"D":969572703,"E":289181808.0223,"F":0.2983,"G":56699241.2481,"H":211,"I":111,"J":86,"K":0.5261,"L":8.3333,"N":122,"O":5.0492,"P":0.918,"Q":"Mức 1","R":77,"S":72,"T":0.9351,"U":0.4167,"V":20,"W":5,"X":28,"Y":3,"Z":4,"AA":0,"AB":3,"AC":0.15,"AD":1.4167,"AE":15,"AF":15,"AG":1,"AH":0,"AI":34,"AJ":15,"AK":0.4412,"AL":1.5833,"AN":53,"AO":3.8868,"AP":1.0228,"AQ":"Đạt","AS":0,"AU":1,"AV":0,"AW":220187969.78,"AX":68405500.0195,"AY":0.3107,"AZ":0,"BA":82780742.46,"BB":28341708,"BC":21474708,"BD":2124000,"BE":4743000,"BF":0.3424,"BG":0,"BH":18,"BI":12,"BJ":0.6667,"BK":240000,"BL":0,"BM":0,"BN":0,"BO":15,"BP":5,"BQ":0.3333,"BR":0,"BS":23,"BT":15,"BU":2,"BV":9,"CA":879723085,"CB":224103782.0167,"CC":89849618,"CD":60993558.0056,"CE":655619302.9833,"CF":28856059.9944,"CG":0.2547,"CH":0.6788},{"name":"Lê Thị Điệp","B":3002464.0004,"C":0.0044,"D":682390333,"E":219388282.0217,"F":0.3215,"G":38583504.2482,"H":197,"I":115,"J":86,"K":0.5838,"L":6.8333,"N":139,"O":4.8561,"P":0.8829,"Q":"Không đạt","R":125,"S":103,"T":0.824,"U":1.8333,"V":20,"W":13,"X":12,"Y":2,"Z":1,"AA":2,"AB":2,"AC":0.1,"AD":1.5,"AE":15,"AF":14,"AG":0.9333,"AH":0.0833,"AI":85,"AJ":32,"AK":0.3765,"AL":4.4167,"AN":59,"AO":3.8136,"AP":1.0036,"AQ":"Đạt","AS":0,"AU":1,"AV":0,"AW":196880123.57,"AX":56407000.0201,"AY":0.2865,"AZ":0,"BA":48338723.05,"BB":17354158,"BC":12837458,"BD":1402200,"BE":3114500,"BF":0.359,"BG":0,"BH":19,"BI":15,"BJ":0.7895,"BK":300000,"BL":0,"BM":0,"BN":0,"BO":15,"BP":5,"BQ":0.3333,"BR":0,"BS":66,"BT":49,"BU":13,"BV":29,"CA":519115430,"CB":164721000.0154,"CC":163274903,"CD":49501958.0063,"CE":354394429.9846,"CF":113772944.9937,"CG":0.3173,"CH":0.3032},{"name":"Lê Thị Mỹ Duyên","B":15283240.002,"C":0.0195,"D":783221318,"E":306677518.0375,"F":0.3916,"G":39711983.3302,"H":275,"I":163,"J":70,"K":0.5927,"L":9.3333,"N":189,"O":3.5767,"P":0.6503,"Q":"Không đạt","R":183,"S":129,"T":0.7049,"U":4.5,"V":20,"W":6,"X":25,"Y":4,"Z":0,"AA":8,"AB":4,"AC":0.2,"AD":1.3333,"AE":15,"AF":14,"AG":0.9333,"AH":0.0833,"AI":120,"AJ":46,"AK":0.3833,"AL":6.1667,"AN":56,"AO":4.0179,"AP":1.0573,"AQ":"Đạt","AS":0,"AU":4,"AV":0,"AW":199111917.21,"AX":78513000.0254,"AY":0.3943,"AZ":0,"BA":47097134.3,"BB":23848366,"BC":20505966,"BD":2351000,"BE":991400,"BF":0.5064,"BG":0,"BH":19,"BI":0,"BJ":0,"BK":0,"BL":0,"BM":0,"BN":0,"BO":15,"BP":4,"BQ":0.2667,"BR":0,"BS":110,"BT":41,"BU":14,"BV":38,"CA":598560827,"CB":251382106.0328,"CC":184660491,"CD":54781346.0057,"CE":347178720.9672,"CF":129879144.9943,"CG":0.42,"CH":0.2967},{"name":"Nguyễn Thị Giang","B":5399900.0002,"C":0.0053,"D":1025834293,"E":419276040.0605,"F":0.4087,"G":50546521.0783,"H":271,"I":144,"J":99,"K":0.5314,"L":10.5833,"N":151,"O":6.245,"P":1.1355,"Q":"Mức 2","R":139,"S":104,"T":0.7482,"U":2.9167,"V":20,"W":19,"X":28,"Y":6,"Z":0,"AA":1,"AB":6,"AC":0.3,"AD":1.1667,"AE":15,"AF":9,"AG":0.6,"AH":0.5,"AI":65,"AJ":15,"AK":0.2308,"AL":4.1667,"AN":56,"AO":4.25,"AP":1.1184,"AQ":"Đạt","AS":0,"AU":0,"AV":0,"AW":324123237.12,"AX":125892500.0543,"AY":0.3884,"AZ":0,"BA":68527044.8,"BB":29193796,"BC":25389696,"BD":2006800,"BE":1797300,"BF":0.426,"BG":0,"BH":18,"BI":11,"BJ":0.6111,"BK":220000,"BL":0,"BM":0,"BN":0,"BO":15,"BP":5,"BQ":0.3333,"BR":0,"BS":55,"BT":24,"BU":5,"BV":14,"CA":883393152,"CB":351182710.0544,"CC":142441141,"CD":60667954.0065,"CE":532210441.9456,"CF":81773186.9935,"CG":0.3975,"CH":0.4259},{"name":"Nguyễn Thị Hiền","B":1119100,"C":0.0015,"D":741310134,"E":270655762.7257,"F":0.3651,"G":39221197.6062,"H":254,"I":138,"J":99,"K":0.5433,"L":9.6667,"N":155,"O":4.7935,"P":0.8716,"Q":"Không đạt","R":132,"S":100,"T":0.7576,"U":2.6667,"V":20,"W":20,"X":23,"Y":1,"Z":0,"AA":1,"AB":1,"AC":0.05,"AD":1.5833,"AE":15,"AF":12,"AG":0.8,"AH":0.25,"AI":58,"AJ":21,"AK":0.3621,"AL":3.0833,"AN":47,"AO":3.5319,"AP":0.9295,"AQ":"Không đạt","AS":0,"AU":1,"AV":0,"AW":227606385.03,"AX":83124416.7008,"AY":0.3652,"AZ":0,"BA":49555689.18,"BB":18459906,"BC":14200006,"BD":1082400,"BE":3177500,"BF":0.3725,"BG":0,"BH":16,"BI":9,"BJ":0.5625,"BK":180000,"BL":0,"BM":0,"BN":0,"BO":15,"BP":1,"BQ":0.0667,"BR":0,"BS":54,"BT":39,"BU":4,"BV":19,"CA":609368338,"CB":206285344.0509,"CC":131941796,"CD":61927526.6755,"CE":403082993.9491,"CF":70014269.3245,"CG":0.3385,"CH":0.4694},{"name":"Nguyễn Thị Thu","B":368712,"C":0.0003,"D":1338434742,"E":577288928.121,"F":0.4313,"G":63428817.8233,"H":247,"I":136,"J":93,"K":0.5506,"L":9.25,"N":160,"O":5.8,"P":1.0545,"Q":"Mức 2","R":129,"S":111,"T":0.8605,"U":1.5,"V":20,"W":23,"X":28,"Y":5,"Z":0,"AA":0,"AB":5,"AC":0.25,"AD":1.25,"AE":15,"AF":5,"AG":0.3333,"AH":0.8333,"AI":57,"AJ":27,"AK":0.4737,"AL":2.5,"AN":47,"AO":3.5957,"AP":0.9462,"AQ":"Không đạt","AS":0,"AU":0,"AV":0,"AW":356920498.27,"AX":184882000.1107,"AY":0.518,"AZ":0,"BA":78689390.29,"BB":25231808,"BC":20755708,"BD":2261600,"BE":2214500,"BF":0.3207,"BG":0,"BH":21,"BI":4,"BJ":0.1905,"BK":0,"BL":0,"BM":0,"BN":0,"BO":15,"BP":5,"BQ":0.3333,"BR":0,"BS":48,"BT":34,"BU":11,"BV":25,"CA":1198352108,"CB":498701578.1054,"CC":140082634,"CD":64620280.0156,"CE":699650529.8946,"CF":75462353.9844,"CG":0.4162,"CH":0.4613},{"name":"Nguyễn Văn Thanh Tâm","B":0,"C":0,"D":735286198,"E":279847726.0695,"F":0.3806,"G":37953205.9942,"H":175,"I":73,"J":45,"K":0.4171,"L":8.5,"N":85,"O":4.0353,"P":0.7337,"Q":"Không đạt","R":93,"S":53,"T":0.5699,"U":3.3333,"V":20,"W":9,"X":16,"Y":1,"Z":0,"AA":3,"AB":1,"AC":0.05,"AD":1.5833,"AE":15,"AF":0,"AG":0,"AH":1.25,"AI":62,"AJ":13,"AK":0.2097,"AL":4.0833,"AN":34,"AO":2.6471,"AP":0.6966,"AQ":"Không đạt","AS":0,"AU":0,"AV":0,"AW":245867388.13,"AX":112257500.0552,"AY":0.4566,"AZ":0,"BA":50409894.83,"BB":18990178,"BC":15993278,"BD":1715400,"BE":1281500,"BF":0.3767,"BG":0,"BH":17,"BI":3,"BJ":0.1765,"BK":0,"BL":0,"BM":0,"BN":0,"BO":15,"BP":3,"BQ":0.2,"BR":0,"BS":51,"BT":23,"BU":2,"BV":11,"CA":624636410,"CB":243356178.0583,"CC":110649788,"CD":34011582.0112,"CE":381280231.9417,"CF":76638205.9888,"CG":0.3896,"CH":0.3074},{"name":"Trần Thế Anh","B":5253400,"C":0.003,"D":1729472675,"E":532012818.7249,"F":0.3076,"G":99788321.3563,"H":274,"I":131,"J":100,"K":0.4781,"L":11.9167,"N":142,"O":4.7676,"P":0.8668,"Q":"Không đạt","R":143,"S":95,"T":0.6643,"U":4,"V":20,"W":7,"X":45,"Y":5,"Z":0,"AA":1,"AB":5,"AC":0.25,"AD":1.25,"AE":15,"AF":4,"AG":0.2667,"AH":0.9167,"AI":80,"AJ":15,"AK":0.1875,"AL":5.4167,"AN":52,"AO":3.4615,"AP":0.9109,"AQ":"Không đạt","AS":0,"AU":0,"AV":0,"AW":332944516.54,"AX":135967666.7143,"AY":0.4084,"AZ":0,"BA":109801839.89,"BB":29571680,"BC":21041280,"BD":4419400,"BE":4111000,"BF":0.2693,"BG":0,"BH":17,"BI":3,"BJ":0.1765,"BK":0,"BL":0,"BM":0,"BN":0,"BO":15,"BP":5,"BQ":0.3333,"BR":0,"BS":66,"BT":34,"BU":4,"BV":15,"CA":1403115260,"CB":392091869.7058,"CC":326357415,"CD":136425029.0195,"CE":1011023390.2942,"CF":189932385.9805,"CG":0.2794,"CH":0.418},{"name":"Nguyễn Thị Hà","B":11059000.0032,"C":0.0156,"D":707239238,"E":234579704.0303,"F":0.3317,"G":39388294.4975,"H":202,"I":103,"J":65,"K":0.5099,"L":8.25,"N":117,"O":4.4017,"P":0.8003,"Q":"Không đạt","R":97,"S":78,"T":0.8041,"U":1.5833,"V":20,"W":11,"X":21,"Y":6,"Z":0,"AA":0,"AB":6,"AC":0.3,"AD":1.1667,"AE":15,"AF":6,"AG":0.4,"AH":0.75,"AI":47,"AJ":15,"AK":0.3191,"AL":2.6667,"AN":36,"AO":3.4444,"AP":0.9064,"AQ":"Không đạt","AS":2,"AU":3,"AV":20000,"AW":183815377.89,"AX":61700250.0274,"AY":0.3357,"AZ":0,"BA":45394081.16,"BB":16495722,"BC":11976222,"BD":2503000,"BE":2016500,"BF":0.3634,"BG":0,"BH":18,"BI":6,"BJ":0.3333,"BK":120000,"BL":0,"BM":0,"BN":0,"BO":15,"BP":5,"BQ":0.3333,"BR":0,"BS":39,"BT":20,"BU":4,"BV":12,"CA":589714619,"CB":197433130.0265,"CC":117524619,"CD":34664442.0042,"CE":392281488.9735,"CF":82860176.9958,"CG":0.3348,"CH":0.295},{"name":"Võ Ngọc Phi","B":7880264.0017,"C":0.0057,"D":1389825167,"E":445181984.0823,"F":0.3203,"G":78720265.2431,"H":174,"I":82,"J":68,"K":0.4713,"L":7.6667,"N":97,"O":5.4536,"P":0.9916,"Q":"Mức 1","R":120,"S":67,"T":0.5583,"U":4.4167,"V":20,"W":4,"X":14,"Y":0,"Z":0,"AA":2,"AB":0,"AC":0,"AD":1.6667,"AE":15,"AF":14,"AG":0.9333,"AH":0.0833,"AI":99,"AJ":15,"AK":0.1515,"AL":7,"AN":31,"AO":4.129,"AP":1.0866,"AQ":"Đạt","AS":0,"AU":1,"AV":0,"AW":411499518.04,"AX":168428000.0694,"AY":0.4093,"AZ":0,"BA":70525019.45,"BB":31001724,"BC":24886424,"BD":1386800,"BE":4728500,"BF":0.4396,"BG":0,"BH":15,"BI":6,"BJ":0.4,"BK":120000,"BL":0,"BM":0,"BN":0,"BO":15,"BP":4,"BQ":0.2667,"BR":0,"BS":74,"BT":29,"BU":4,"BV":17,"CA":1265968060,"CB":374968472.0657,"CC":123857107,"CD":64126920.0166,"CE":890999587.9343,"CF":59730186.9834,"CG":0.2962,"CH":0.5177}]};
+const R=D.rows,T=D.total,prog=D.day/D.days;
+const K=[
+{k:'KPI 1',n:'Doanh số tổng',w:38.5144,ct:'D',th:'E',p:'F',bq:'G',f:'m'},
+{k:'KPI 2',n:'PC_BT (Kênh OFF)',w:15.1307,ct:'H',th:'I',p:'K',bq:'L',f:'i'},
+{k:'KPI 3',n:'LPPC',w:13.7551,ctv:5.5,th:'O',p:'P',f:'x',fix:1},
+{k:'KPI 4',n:'ASO_All',w:7.1527,ct:'R',th:'S',p:'T',bq:'U',f:'i'},
+{k:'KPI 5',n:'ASO Focus (Trận Xanh)',w:6.8776,ct:'V',th:'AB',p:'AC',bq:'AD',f:'i'},
+{k:'KPI 6',n:'ASO Focus 2 (Trận Vàng)',w:5.5021,ct:'AE',th:'AF',p:'AG',bq:'AH',f:'i'},
+{k:'KPI 7',n:'PC_ON (Kênh ON)',w:10.3163,ct:'AI',th:'AJ',p:'AK',bq:'AL',f:'i'},
+{k:'KPI 8',n:'LPPC_Meat',w:2.7511,ctv:3.8,th:'AO',p:'AP',f:'x',fix:1}];
+const nf=new Intl.NumberFormat('vi-VN');
+const M=v=>v>=1e9?(v/1e9).toFixed(2)+' tỷ':v>=1e6?(v/1e6).toFixed(1)+' tr':nf.format(Math.round(v));
+const fv=(v,f)=>f=='m'?M(v):f=='x'?v.toFixed(2):nf.format(Math.round(v));
+const P=v=>(v*100).toFixed(1)+'%';
+const st=(p,fix)=>{const t=fix?1:prog;return p>=t?'ok':p>=.8*t?'warn':'bad'};
+const ct=(o,k)=>k.ctv??o[k.ct];
+document.getElementById('mo').textContent=D.month;
+document.getElementById('as').textContent='Số liệu đến '+D.asof.split('-').reverse().join('/')+' · Ngày '+D.day+'/'+D.days;
+document.getElementById('pt').textContent='Tiến độ thời gian: '+P(prog);
+document.getElementById('pb').style.width=P(prog);
+document.getElementById('kp').innerHTML=K.map(k=>{const p=T[k.p],s=st(p,k.fix);
+return `<div class="k"><div class="t"><span>${k.k}</span><span>Tỷ trọng ${k.w}%</span></div><div class="n">${k.n}</div>
+<div class="p ${s}">${P(p)}</div><div class="tr"><i class="bg-${s}" style="width:${Math.min(p,1)*100}%"></i>${k.fix?'':`<u style="left:${prog*100}%"></u>`}</div>
+<div class="d">${fv(T[k.th],k.f)} / ${fv(ct(T,k),k.f)}${k.bq?' · cần '+fv(T[k.bq],k.f)+'/ngày':''}</div></div>`}).join('');
+const bon=['AV','AZ','BG','BK','BN','BR'];
+R.forEach(r=>r.bonus=bon.reduce((a,c)=>a+(r[c]||0),0));T.bonus=bon.reduce((a,c)=>a+(T[c]||0),0);
+let sk='name',sd=1,sel=0;
+const cols=[{h:'Nhân viên',g:r=>r.name}].concat(K.map(k=>({h:k.k+' · '+k.n.split(' (')[0],g:r=>r[k.p],k})),[{h:'Thưởng',g:r=>r.bonus}]);
+function draw(){
+ const rows=R.map((r,i)=>[r,i]).sort((a,b)=>{const x=cols[sk].g(a[0]),y=cols[sk].g(b[0]);return (x>y?1:x<y?-1:0)*sd});
+ document.getElementById('th').innerHTML='<tr>'+cols.map((c,i)=>`<th data-i="${i}">${c.h}${i==sk?(sd>0?' ▲':' ▼'):''}</th>`).join('')+'</tr>';
+ document.getElementById('tb').innerHTML=rows.map(([r,i])=>`<tr data-r="${i}" class="${i==sel?'sel':''}">`+cols.map((c,j)=>j==0?`<td>${r.name}</td>`:c.k?`<td><span class="c ${st(r[c.k.p],c.k.fix)}">${P(r[c.k.p])}</span></td>`:`<td>${r.bonus?M(r.bonus):'–'}</td>`).join('')+'</tr>').join('');
+ document.getElementById('tf').innerHTML='<tr><td>Tổng</td>'+K.map(k=>`<td><span class="c ${st(T[k.p],k.fix)}">${P(T[k.p])}</span></td>`).join('')+`<td>${M(T.bonus)}</td></tr>`;
+ document.querySelectorAll('#th th').forEach(h=>h.onclick=()=>{const i=+h.dataset.i;sd=sk==i?-sd:(i?-1:1);sk=i;draw()});
+ document.querySelectorAll('#tb tr').forEach(t=>t.onclick=()=>{sel=+t.dataset.r;draw();det()});
+}
+function det(){const r=R[sel];document.getElementById('dn').textContent='· '+r.name;
+ const bl=[['Gia vị – Xốt Chinsu',`${r.AU}/${r.AT||5} CH · TBay ${r.AS}`,r.AV],['Mì (CVF)',M(r.AX)+' / '+M(r.AW)+' · '+P(r.AY),r.AZ],['Nghành Meat',M(r.BB)+' / '+M(r.BA)+' · '+P(r.BF),r.BG],['TBTN Tea 365',r.BI+' CH · '+P(r.BJ),r.BK],['Ruby & STT',r.BL+' Ruby · '+r.BM+' STT',r.BN],['ASO Homey',r.BP+' / 15 · '+P(r.BQ),r.BR]];
+ document.getElementById('dt').innerHTML=K.map(k=>`<div class="x"><b>${k.k} · ${k.n}</b><span><i>Chỉ tiêu</i><i>${fv(ct(r,k),k.f)}</i></span><span><i>Thực hiện</i><i>${fv(r[k.th],k.f)}</i></span><span><i>% đạt</i><i class="${st(r[k.p],k.fix)}">${P(r[k.p])}</i></span>${k.bq?`<span><i>Cần/ngày</i><i>${fv(r[k.bq],k.f)}</i></span>`:`<span><i>Mức đạt</i><i>${r.Q&&k.n=='LPPC'?r.Q:r.AQ}</i></span>`}</div>`).join('')
+ +`<div class="x"><b>Doanh số hôm qua</b><span><i>Số tiền</i><i>${M(r.B)}</i></span><span><i>% chỉ tiêu</i><i>${P(r.C)}</i></span></div>`
+ +`<div class="x"><b>Kênh ON / MCP</b><span><i>MCP ON</i><i>${r.BS}</i></span><span><i>MCP Bev</i><i>${r.BT}</i></span><span><i>ASO Tea</i><i>${r.BU}</i></span><span><i>ASO</i><i>${r.BV}</i></span></div>`
+ +`<div class="x"><b>WinX · Combo</b><span><i>WinX</i><i>${M(r.CB)} / ${M(r.CA)} (${P(r.CG)})</i></span><span><i>Combo</i><i>${M(r.CD)} / ${M(r.CC)} (${P(r.CH)})</i></span></div>`
+ +bl.map(b=>`<div class="x"><b>Thưởng ${b[0]}</b><span><i>${b[1]}</i></span><span><i>Thưởng</i><i>${b[2]?M(b[2]):'–'}</i></span></div>`).join('')}
+const s1=[...R].sort((a,b)=>b.F-a.F),mx=Math.max(...R.map(r=>r.F),prog,.01)*1.1;
+document.getElementById('c1').innerHTML=s1.map(r=>`<div class="row"><span class="nm">${r.name}</span><div class="tr"><i class="bg-${st(r.F)}" style="width:${r.F/mx*100}%"></i><u style="left:${prog/mx*100}%"></u></div><b>${P(r.F)}</b></div>`).join('')+`<div class="leg">Vạch đen = tiến độ thời gian (${P(prog)}).</div>`;
+const s2=[...R].sort((a,b)=>b.bonus-a.bonus),mb=Math.max(...R.map(r=>r.bonus),1);
+document.getElementById('c2').innerHTML=s2.map(r=>`<div class="row"><span class="nm">${r.name}</span><div class="tr"><i class="bg-ok" style="width:${r.bonus/mb*100}%"></i></div><b>${r.bonus?M(r.bonus):'–'}</b></div>`).join('')+`<div class="leg">Gồm thưởng Chinsu, Mì, Meat, Tea 365, Ruby/STT, Homey theo sheet.</div>`;
+draw();det();
+</script></body></html>
